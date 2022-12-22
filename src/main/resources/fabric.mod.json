@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "emotes",
+  "version": "${version}",
+
+  "name": "Emotes",
+  "description": "Server side emojis",
+  "authors": [
+    "Simon - fantomitechno (aka Simon R)"
+  ],
+
+  "license": "MIT",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.renoux.emotes.Emotes"
+    ]
+  },
+  "mixins": [
+    "emotes.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14.6",
+    "minecraft": ">=1.19",
+    "java": ">=17"
+  }
+}
