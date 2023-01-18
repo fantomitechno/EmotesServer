@@ -42,7 +42,7 @@ public abstract class PlayerManagerMixin {
   }
 
   private String replaceEmotes(String message) {
-    String returnMessage = message;
+    String returnMessage = message.replaceAll("\"", "\\\"");
     returnMessage = returnMessage.replaceAll(":attentif:", "\"}, {\"translate\": \"mathox1Attentif\"}, {\"text\":\"")
         .replaceAll(":coeur:", "\"}, {\"translate\": \"mathox1Coeur\"}, {\"text\":\"")
         .replaceAll(":D:", "\"}, {\"translate\": \"mathox1D\"}, {\"text\":\"")
