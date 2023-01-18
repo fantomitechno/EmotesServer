@@ -1,7 +1,9 @@
 package dev.renoux.emotes.mixins;
 
+import java.util.Set;
 import java.util.function.Function;
 
+import net.minecraft.text.MutableText;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,78 +21,118 @@ import net.minecraft.util.registry.RegistryKey;
 
 @Mixin(PlayerManager.class)
 public abstract class PlayerManagerMixin {
-  @Shadow
-  public abstract void broadcast(SignedMessage message,
-      Function<ServerPlayerEntity, SignedMessage> playerMessageFactory, MessageSender sender,
-      RegistryKey<MessageType> typeKey);
 
-  @Inject(method = "broadcast(Lnet/minecraft/server/filter/FilteredMessage;Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/util/registry/RegistryKey;)V", at = @At("HEAD"), cancellable = true)
-  private void onSendChatMessage(FilteredMessage<SignedMessage> message, ServerPlayerEntity sender,
-      RegistryKey<MessageType> typeKey, CallbackInfo ci) {
+    private static final Set<String> EMOTES = Set.of(
+            "coeur", "D", "diamond", "gg",
+            "hug", "salut", "singe", "zzz",
+            "awm", "bagarre", "bingo", "bonk",
+            "chant", "clip", "dab", "fangirl",
+            "fine", "fr", "gasm", "gouzi",
+            "hmm", "hype", "karma", "kdo",
+            "luck", "miam", "modeste", "music",
+            "noluck", "nul", "oasis", "ombre",
+            "oops", "oula", "paint", "perdu",
+            "peur", "pog", "pride", "rip",
+            "rng", "shh", "smirk", "soldat",
+            "stonks", "sueur", "timide"
+    );
 
-    this.broadcast(message.raw(), (player) -> {
-      return SignedMessage.of(replaceEmotes(message.filtered().getContent()),
-          message.filtered().signature());
-    }, sender.asMessageSender(), typeKey);
-    ci.cancel();
-  }
+    @Shadow
+    public abstract void broadcast(SignedMessage message,
+                                   Function<ServerPlayerEntity, SignedMessage> playerMessageFactory, MessageSender sender,
+                                   RegistryKey<MessageType> typeKey);
 
-  private Text replaceEmotes(Text content) {
-    String message = content.getString();
-    message = replaceEmotes(message);
-    return Text.Serializer.fromJson("[{\"text\":\"" + message + "\"}]");
-  }
+    @Inject(method = "broadcast(Lnet/minecraft/server/filter/FilteredMessage;Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/util/registry/RegistryKey;)V", at = @At("HEAD"), cancellable = true)
+    private void onSendChatMessage(FilteredMessage<SignedMessage> message, ServerPlayerEntity sender,
+                                   RegistryKey<MessageType> typeKey, CallbackInfo ci) {
 
-  private String replaceEmotes(String message) {
-    String returnMessage = message.replaceAll("\"", "\\\"");
-    returnMessage = returnMessage.replaceAll(":attentif:", "\"}, {\"translate\": \"mathox1Attentif\"}, {\"text\":\"")
-        .replaceAll(":coeur:", "\"}, {\"translate\": \"mathox1Coeur\"}, {\"text\":\"")
-        .replaceAll(":D:", "\"}, {\"translate\": \"mathox1D\"}, {\"text\":\"")
-        .replaceAll(":diamond:", "\"}, {\"translate\": \"mathox1Diamond\"}, {\"text\":\"")
-        .replaceAll(":gg:", "\"}, {\"translate\": \"mathox1Gg\"}, {\"text\":\"")
-        .replaceAll(":hug:", "\"}, {\"translate\": \"mathox1Hug\"}, {\"text\":\"")
-        .replaceAll(":salut:", "\"}, {\"translate\": \"mathox1Salut\"}, {\"text\":\"")
-        .replaceAll(":singe:", "\"}, {\"translate\": \"mathox1Singe\"}, {\"text\":\"")
-        .replaceAll(":zzz:", "\"}, {\"translate\": \"mathox1Zzz\"}, {\"text\":\"")
-        .replaceAll(":awm:", "\"}, {\"translate\": \"mathox1Awm\"}, {\"text\":\"")
-        .replaceAll(":bagarre:", "\"}, {\"translate\": \"mathox1Bagarre\"}, {\"text\":\"")
-        .replaceAll(":bingo:", "\"}, {\"translate\": \"mathox1Bingo\"}, {\"text\":\"")
-        .replaceAll(":bonk:", "\"}, {\"translate\": \"mathox1Bonk\"}, {\"text\":\"")
-        .replaceAll(":chant:", "\"}, {\"translate\": \"mathox1Chant\"}, {\"text\":\"")
-        .replaceAll(":clip:", "\"}, {\"translate\": \"mathox1Clip\"}, {\"text\":\"")
-        .replaceAll(":dab:", "\"}, {\"translate\": \"mathox1Dab\"}, {\"text\":\"")
-        .replaceAll(":fangirl:", "\"}, {\"translate\": \"mathox1Fangirl\"}, {\"text\":\"")
-        .replaceAll(":fine:", "\"}, {\"translate\": \"mathox1Fine\"}, {\"text\":\"")
-        .replaceAll(":fr:", "\"}, {\"translate\": \"mathox1Fr\"}, {\"text\":\"")
-        .replaceAll(":gasm:", "\"}, {\"translate\": \"mathox1Gasm\"}, {\"text\":\"")
-        .replaceAll(":gouzi:", "\"}, {\"translate\": \"mathox1Gouzi\"}, {\"text\":\"")
-        .replaceAll(":hmm:", "\"}, {\"translate\": \"mathox1Hmm\"}, {\"text\":\"")
-        .replaceAll(":hype:", "\"}, {\"translate\": \"mathox1Hype\"}, {\"text\":\"")
-        .replaceAll(":karma:", "\"}, {\"translate\": \"mathox1Karma\"}, {\"text\":\"")
-        .replaceAll(":kdo:", "\"}, {\"translate\": \"mathox1Kdo\"}, {\"text\":\"")
-        .replaceAll(":luck:", "\"}, {\"translate\": \"mathox1Luck\"}, {\"text\":\"")
-        .replaceAll(":miam:", "\"}, {\"translate\": \"mathox1Miam\"}, {\"text\":\"")
-        .replaceAll(":modeste:", "\"}, {\"translate\": \"mathox1Modeste\"}, {\"text\":\"")
-        .replaceAll(":music:", "\"}, {\"translate\": \"mathox1Music\"}, {\"text\":\"")
-        .replaceAll(":noluck:", "\"}, {\"translate\": \"mathox1Noluck\"}, {\"text\":\"")
-        .replaceAll(":nul:", "\"}, {\"translate\": \"mathox1Nul\"}, {\"text\":\"")
-        .replaceAll(":oasis:", "\"}, {\"translate\": \"mathox1Oasis\"}, {\"text\":\"")
-        .replaceAll(":ombre:", "\"}, {\"translate\": \"mathox1Ombre\"}, {\"text\":\"")
-        .replaceAll(":oops:", "\"}, {\"translate\": \"mathox1Oops\"}, {\"text\":\"")
-        .replaceAll(":oula:", "\"}, {\"translate\": \"mathox1Oula\"}, {\"text\":\"")
-        .replaceAll(":paint:", "\"}, {\"translate\": \"mathox1Paint\"}, {\"text\":\"")
-        .replaceAll(":perdu:", "\"}, {\"translate\": \"mathox1Perdu\"}, {\"text\":\"")
-        .replaceAll(":peur:", "\"}, {\"translate\": \"mathox1Peur\"}, {\"text\":\"")
-        .replaceAll(":pog:", "\"}, {\"translate\": \"mathox1Pog\"}, {\"text\":\"")
-        .replaceAll(":pride:", "\"}, {\"translate\": \"mathox1Pride\"}, {\"text\":\"")
-        .replaceAll(":rip:", "\"}, {\"translate\": \"mathox1Rip\"}, {\"text\":\"")
-        .replaceAll(":rng:", "\"}, {\"translate\": \"mathox1Rng\"}, {\"text\":\"")
-        .replaceAll(":shh:", "\"}, {\"translate\": \"mathox1Shh\"}, {\"text\":\"")
-        .replaceAll(":smirk:", "\"}, {\"translate\": \"mathox1Smirk\"}, {\"text\":\"")
-        .replaceAll(":soldat:", "\"}, {\"translate\": \"mathox1Soldat\"}, {\"text\":\"")
-        .replaceAll(":stonks:", "\"}, {\"translate\": \"mathox1Stonks\"}, {\"text\":\"")
-        .replaceAll(":sueur:", "\"}, {\"translate\": \"mathox1Sueur\"}, {\"text\":\"")
-        .replaceAll(":timide:", "\"}, {\"translate\": \"mathox1Timide\"}, {\"text\":\"");
-    return returnMessage;
-  }
+        this.broadcast(message.raw(), (player) -> {
+            return SignedMessage.of(this.processMessage(message.filtered().getContent()),
+                    message.filtered().signature());
+        }, sender.asMessageSender(), typeKey);
+        ci.cancel();
+    }
+
+    private Text processMessage(String message) {
+        char[] chars = message.toCharArray();
+        StringBuilder textBuilder = new StringBuilder();
+        Text rootElement = null;
+        MutableText currentElement = null;
+
+        int index = 0;
+        int emoteStartIndex = 0;
+        boolean readingEmoteName = false;
+        while (index < chars.length) {
+            char token = chars[index++];
+
+            textBuilder.append(token);
+
+            if (token == ':') { // Found start/end of emote pattern
+                if (!readingEmoteName) { // Not currently reading emote name, means this *may* be the beginning of an emote
+                    readingEmoteName = true;
+                    emoteStartIndex = textBuilder.length() - 1;
+                } else { // Currently reading emote name, meaning that this is the end of an emote and should be processed as an emote
+                    readingEmoteName = false;
+
+                    String emoteName = textBuilder.substring(emoteStartIndex + 1, textBuilder.length() - 1);
+                    if (PlayerManagerMixin.EMOTES.contains(emoteName)) { // Valid emote name, proceeding translation
+                        // Strip emote from text builder
+                        textBuilder.delete(emoteStartIndex, textBuilder.length());
+
+                        if (!textBuilder.isEmpty()) {
+                            MutableText text = Text.literal(textBuilder.toString());
+
+                            if (currentElement != null) {
+                                currentElement.append(text);
+                            }
+
+                            currentElement = text;
+
+                            if (rootElement == null) {
+                                rootElement = currentElement;
+                            }
+                        }
+
+                        char[] emoteChars = emoteName.toCharArray();
+
+                        emoteChars[0] = Character.toUpperCase(emoteChars[0]); // Capitalize first character
+
+                        MutableText emoteText = Text.translatable("mathox1" + new String(emoteChars));
+
+                        if (currentElement != null) {
+                            currentElement.append(emoteText);
+                        }
+
+                        currentElement = emoteText;
+
+                        if (rootElement == null) {
+                            rootElement = currentElement;
+                        }
+
+                        textBuilder.delete(0, textBuilder.length()); // Clear string builder
+                    }
+                }
+            } else {
+                if (readingEmoteName && ((token < 'A' || token > 'Z') && (token < 'a' || token > 'z'))) { // Not a letter, this ain't an emote
+                    readingEmoteName = false;
+                }
+            }
+        }
+
+        if (!textBuilder.isEmpty()) {
+            MutableText text = Text.literal(textBuilder.toString());
+
+            if (currentElement != null) {
+                currentElement.append(text);
+            }
+
+            currentElement = text;
+
+            if (rootElement == null) {
+                rootElement = currentElement;
+            }
+        }
+
+        return rootElement;
+    }
 }
