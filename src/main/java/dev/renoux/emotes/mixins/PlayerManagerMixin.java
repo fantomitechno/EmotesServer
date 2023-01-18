@@ -34,20 +34,19 @@ public abstract class PlayerManagerMixin {
             "oops", "oula", "paint", "perdu",
             "peur", "pog", "pride", "rip",
             "rng", "shh", "smirk", "soldat",
-            "stonks", "sueur", "timide"
-    );
+            "stonks", "sueur", "timide");
 
     @Shadow
     public abstract void broadcast(SignedMessage message,
-                                   Function<ServerPlayerEntity, SignedMessage> playerMessageFactory, MessageSender sender,
-                                   RegistryKey<MessageType> typeKey);
+            Function<ServerPlayerEntity, SignedMessage> playerMessageFactory, MessageSender sender,
+            RegistryKey<MessageType> typeKey);
 
     @Inject(method = "broadcast(Lnet/minecraft/server/filter/FilteredMessage;Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/util/registry/RegistryKey;)V", at = @At("HEAD"), cancellable = true)
     private void onSendChatMessage(FilteredMessage<SignedMessage> message, ServerPlayerEntity sender,
-                                   RegistryKey<MessageType> typeKey, CallbackInfo ci) {
+            RegistryKey<MessageType> typeKey, CallbackInfo ci) {
 
         this.broadcast(message.raw(), (player) -> {
-            return SignedMessage.of(this.processMessage(message.filtered().getContent()),
+            return SignedMessage.of(this.processMessage(message.filtered().getContent().getString()),
                     message.filtered().signature());
         }, sender.asMessageSender(), typeKey);
         ci.cancel();
@@ -68,10 +67,12 @@ public abstract class PlayerManagerMixin {
             textBuilder.append(token);
 
             if (token == ':') { // Found start/end of emote pattern
-                if (!readingEmoteName) { // Not currently reading emote name, means this *may* be the beginning of an emote
+                if (!readingEmoteName) { // Not currently reading emote name, means this *may* be the beginning of an
+                                         // emote
                     readingEmoteName = true;
                     emoteStartIndex = textBuilder.length() - 1;
-                } else { // Currently reading emote name, meaning that this is the end of an emote and should be processed as an emote
+                } else { // Currently reading emote name, meaning that this is the end of an emote and
+                         // should be processed as an emote
                     readingEmoteName = false;
 
                     String emoteName = textBuilder.substring(emoteStartIndex + 1, textBuilder.length() - 1);
@@ -113,7 +114,10 @@ public abstract class PlayerManagerMixin {
                     }
                 }
             } else {
-                if (readingEmoteName && ((token < 'A' || token > 'Z') && (token < 'a' || token > 'z'))) { // Not a letter, this ain't an emote
+                if (readingEmoteName && ((token < 'A' || token > 'Z') && (token < 'a' || token > 'z'))) { // Not a
+                                                                                                          // letter,
+                                                                                                          // this ain't
+                                                                                                          // an emote
                     readingEmoteName = false;
                 }
             }
