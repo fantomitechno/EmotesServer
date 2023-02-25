@@ -34,7 +34,8 @@ public abstract class PlayerManagerMixin {
             "oops", "oula", "paint", "perdu",
             "peur", "pog", "pride", "rip",
             "rng", "shh", "smirk", "soldat",
-            "stonks", "sueur", "timide");
+            "stonks", "sueur", "timide",
+            "attentif");
 
     @Shadow
     public abstract void broadcast(SignedMessage message,
