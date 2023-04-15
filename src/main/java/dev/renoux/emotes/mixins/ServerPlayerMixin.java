@@ -33,7 +33,7 @@ public abstract class ServerPlayerMixin {
   // Messages from the server (/chat)
   @Inject(method = "sendMessage(Lnet/minecraft/text/Text;)V", at = @At("HEAD"), cancellable = true)
   private void onSendMessage(Text message, CallbackInfo ci) {
-    this.sendMessage(Emotes.processMessage(message.toString()), MessageType.CHAT);
+    this.sendMessage(Emotes.processMessage(message.getString()), MessageType.SYSTEM);
     ci.cancel();
   }
 
@@ -41,11 +41,14 @@ public abstract class ServerPlayerMixin {
   @Inject(method = "sendChatMessage(Lnet/minecraft/network/message/SignedMessage;Lnet/minecraft/network/message/MessageSender;Lnet/minecraft/util/registry/RegistryKey;)V", at = @At("HEAD"), cancellable = true)
   private void sendChatMessage(SignedMessage message, MessageSender sender, RegistryKey<MessageType> typeKey,
       CallbackInfo ci) {
+    SignedMessage signedMessage = SignedMessage.of(Emotes.processMessage(message.getContent().getString()),
+        message.signature());
     if (this.acceptsMessage(typeKey)) {
       this.networkHandler.sendPacket(
-          new ChatMessageS2CPacket(message.signedContent(), message.unsignedContent(), this.getMessageTypeId(typeKey),
-              sender, message.signature().timestamp(), message.signature().saltSignature()));
+          new ChatMessageS2CPacket(signedMessage.signedContent(), signedMessage.unsignedContent(),
+              this.getMessageTypeId(typeKey),
+              sender, signedMessage.signature().timestamp(), signedMessage.signature().saltSignature()));
     }
+    ci.cancel();
   }
-
 }
