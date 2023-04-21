@@ -29,7 +29,6 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import dev.renoux.emotes.mixins.PlayerManagerMixin;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;

@@ -3,7 +3,7 @@
   "minVersion": "0.8",
   "package": "dev.renoux.emotes.mixins",
   "compatibilityLevel": "JAVA_17",
-  "mixins": ["PlayerManagerMixin", "ServerPlayerMixin"],
+  "mixins": ["ServerPlayerMixin"],
   "injectors": {
     "defaultRequire": 1
   }

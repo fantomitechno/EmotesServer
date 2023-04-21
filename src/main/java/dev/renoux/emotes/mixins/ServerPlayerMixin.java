@@ -37,7 +37,7 @@ public abstract class ServerPlayerMixin {
     ci.cancel();
   }
 
-  // Private messages (/msg, /tell, /w)
+  // Private messages (/msg, /tell, /w) and normal chat messages
   @Inject(method = "sendChatMessage(Lnet/minecraft/network/message/SignedMessage;Lnet/minecraft/network/message/MessageSender;Lnet/minecraft/util/registry/RegistryKey;)V", at = @At("HEAD"), cancellable = true)
   private void sendChatMessage(SignedMessage message, MessageSender sender, RegistryKey<MessageType> typeKey,
       CallbackInfo ci) {
