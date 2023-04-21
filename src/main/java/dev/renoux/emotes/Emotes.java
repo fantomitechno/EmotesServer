@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
 public class Emotes implements ModInitializer {
@@ -52,10 +53,10 @@ public class Emotes implements ModInitializer {
       "stonks", "sueur", "timide",
       "attentif");
 
-  public static Text processMessage(String message) {
+  public static Text processMessage(String message, Style format) {
     char[] chars = message.toCharArray();
     StringBuilder textBuilder = new StringBuilder();
-    Text rootElement = null;
+    MutableText rootElement = null;
     MutableText currentElement = null;
 
     int index = 0;
@@ -137,7 +138,7 @@ public class Emotes implements ModInitializer {
       }
     }
 
-    return rootElement;
+    return rootElement.setStyle(format);
   }
 
   @Override

@@ -33,7 +33,7 @@ public abstract class ServerPlayerMixin {
   // Messages from the server (/chat)
   @Inject(method = "sendMessage(Lnet/minecraft/text/Text;)V", at = @At("HEAD"), cancellable = true)
   private void onSendMessage(Text message, CallbackInfo ci) {
-    this.sendMessage(Emotes.processMessage(message.getString()), MessageType.SYSTEM);
+    this.sendMessage(Emotes.processMessage(message.getString(), message.getStyle()), MessageType.SYSTEM);
     ci.cancel();
   }
 
@@ -41,7 +41,8 @@ public abstract class ServerPlayerMixin {
   @Inject(method = "sendChatMessage(Lnet/minecraft/network/message/SignedMessage;Lnet/minecraft/network/message/MessageSender;Lnet/minecraft/util/registry/RegistryKey;)V", at = @At("HEAD"), cancellable = true)
   private void sendChatMessage(SignedMessage message, MessageSender sender, RegistryKey<MessageType> typeKey,
       CallbackInfo ci) {
-    SignedMessage signedMessage = SignedMessage.of(Emotes.processMessage(message.getContent().getString()),
+    SignedMessage signedMessage = SignedMessage.of(
+        Emotes.processMessage(message.getContent().getString(), message.getContent().getStyle()),
         message.signature());
     if (this.acceptsMessage(typeKey)) {
       this.networkHandler.sendPacket(

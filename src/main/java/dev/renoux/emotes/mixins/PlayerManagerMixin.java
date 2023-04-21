@@ -29,7 +29,9 @@ public abstract class PlayerManagerMixin {
             RegistryKey<MessageType> typeKey, CallbackInfo ci) {
 
         this.broadcast(message.raw(), (player) -> {
-            return SignedMessage.of(Emotes.processMessage(message.filtered().getContent().getString()),
+            return SignedMessage.of(
+                    Emotes.processMessage(message.filtered().getContent().getString(),
+                            message.filtered().getContent().getStyle()),
                     message.filtered().signature());
         }, sender.asMessageSender(), typeKey);
         ci.cancel();
