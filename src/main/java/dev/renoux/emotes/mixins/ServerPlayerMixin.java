@@ -33,7 +33,7 @@ public abstract class ServerPlayerMixin {
   // Messages from the server (/chat)
   @Inject(method = "sendMessage(Lnet/minecraft/text/Text;)V", at = @At("HEAD"), cancellable = true)
   private void onSendMessage(Text message, CallbackInfo ci) {
-    if (message.getString().startWith("message.voicechat"))
+    if (message.getString().startsWith("message.voicechat"))
         return;
     this.sendMessage(Emotes.processMessage(message.getString(), message.getStyle()), MessageType.SYSTEM);
     ci.cancel();
