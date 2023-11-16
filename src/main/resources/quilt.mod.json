@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "quilt_loader": {
+    "group": "dev.renoux",
+    "id": "survival1emotes",
+    "version": "${version}",
+    "metadata": {
+      "name": "Survival1Emotes",
+      "description": "Emotes for the survival server",
+      "contributors": {
+        "Simon - fantomitechno (aka Simon R)": "Developper"
+      }
+    },
+    "intermediate_mappings": "net.fabricmc:intermediary",
+    "entrypoints": {
+      "init": "dev.renoux.survival1emotes.Emotes"
+    },
+    "depends": [
+      {
+        "id": "quilt_loader",
+        "versions": ">=0.19.1"
+      },
+      {
+        "id": "quilted_fabric_api",
+        "versions": ">=7.0.0"
+      },
+      {
+        "id": "minecraft",
+        "versions": ">=1.20"
+      }
+    ]
+  },
+  "mixin": "survival1emotes.mixins.json",
+  "minecraft": {
+    "environment": "*"
+  }
+}
