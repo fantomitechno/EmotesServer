@@ -4,6 +4,7 @@ import dev.renoux.survival1emotes.config.ModConfig;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
 import org.quiltmc.config.api.values.ValueList;
 
 import java.util.HashMap;
@@ -22,23 +23,6 @@ public class EmoteProcessor {
             EMOTES.put(splitedEmote[0], splitedEmote[1]);
         }
     }
-
-    /*
-    private static final Set<String> EMOTES = Set.of(
-            "coeur", "D", "diamond", "gg",
-            "hug", "salut", "singe", "zzz",
-            "awm", "bagarre", "bingo", "bonk",
-            "chant", "clip", "dab", "fangirl",
-            "fine", "fr", "gasm", "gouzi",
-            "hmm", "hype", "karma", "kdo",
-            "luck", "miam", "modeste", "music",
-            "noluck", "nul", "oasis", "ombre",
-            "oops", "oula", "paint", "perdu",
-            "peur", "pog", "pride", "rip",
-            "rng", "shh", "smirk", "soldat",
-            "stonks", "sueur", "timide",
-            "attentif");
-            */
 
     public static Component processMessage(String message, Style format) {
         char[] chars = message.toCharArray();
@@ -83,7 +67,7 @@ public class EmoteProcessor {
                             }
                         }
 
-                        MutableComponent emoteText = Component.translatable(emote);
+                        MutableComponent emoteText = Component.translatableWithFallback("emotes." + emoteName, emote);
 
                         if (currentElement != null) {
                             currentElement.append(emoteText);

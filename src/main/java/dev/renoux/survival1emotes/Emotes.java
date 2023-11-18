@@ -24,21 +24,15 @@
 
 package dev.renoux.survival1emotes;
 
-import com.mojang.brigadier.context.CommandContext;
 import dev.renoux.survival1emotes.config.ModConfig;
 import dev.renoux.survival1emotes.utils.EmoteProcessor;
-import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.network.chat.Component;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.loader.api.ModMetadata;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
-import org.quiltmc.qsl.command.api.CommandRegistrationCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Objects;
-
-import static com.mojang.brigadier.builder.LiteralArgumentBuilder.literal;
+import java.io.IOException;
 
 
 public class Emotes implements ModInitializer {
@@ -57,6 +51,11 @@ public class Emotes implements ModInitializer {
 
     EmoteProcessor.init();
 
+    try {
+      Events.init();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
 
     LOGGER.info("{} : LOADED", metadata.name());
   }
