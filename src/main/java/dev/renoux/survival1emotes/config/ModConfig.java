@@ -21,19 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 package dev.renoux.survival1emotes.config;
 
+import org.quiltmc.config.api.Config;
 import org.quiltmc.config.api.values.TrackedValue;
 import org.quiltmc.config.api.values.ValueList;
-import org.quiltmc.loader.api.config.QuiltConfig;
+import org.quiltmc.loader.api.config.v2.QuiltConfig;
 
 import static dev.renoux.survival1emotes.Emotes.metadata;
 
 public class ModConfig {
     private TrackedValue<ValueList<String>> Emotes;
 
-    private final org.quiltmc.config.api.Config config;
+    private final Config config;
     private static ModConfig SINGLE_INSTANCE = null;
 
     public ModConfig() {
