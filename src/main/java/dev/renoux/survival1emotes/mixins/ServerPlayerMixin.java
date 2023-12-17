@@ -53,7 +53,7 @@ public abstract class ServerPlayerMixin extends Player {
   // Messages from the server (/chat)
   @Inject(method = "sendSystemMessage(Lnet/minecraft/network/chat/Component;)V", at = @At("HEAD"), cancellable = true)
   private void onSendMessage(Component message, CallbackInfo ci) {
-    if (message.getString().startsWith("message.voicechat"))
+    if (message.getString().startsWith("message.voicechat") || message.getString().startsWith("xaero-waypoint"))
         return;
     this.sendSystemMessage(EmoteProcessor.processMessage(message.getString(), message.getStyle()), false);
     ci.cancel();
