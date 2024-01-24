@@ -26,18 +26,19 @@ package dev.renoux.survival1emotes.mixins;
 import com.mojang.authlib.GameProfile;
 import dev.renoux.survival1emotes.utils.EmoteProcessor;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.ChatType;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.OutgoingChatMessage;
-import net.minecraft.network.chat.PlayerChatMessage;
+import net.minecraft.network.chat.*;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin extends Player {
@@ -55,7 +56,13 @@ public abstract class ServerPlayerMixin extends Player {
   private void onSendMessage(Component message, CallbackInfo ci) {
     if (message.getString().startsWith("message.voicechat") || message.getString().startsWith("xaero-waypoint"))
         return;
-    this.sendSystemMessage(EmoteProcessor.processMessage(message.getString(), message.getStyle()), false);
+
+    if (message.getSiblings().isEmpty()) {
+      this.sendSystemMessage(EmoteProcessor.processMessage(message.getString(), message.getStyle()), false);
+    } else {
+      this.sendSystemMessage(processSiblings(message.getSiblings()), false);
+    }
+
     ci.cancel();
   }
 
@@ -72,5 +79,20 @@ public abstract class ServerPlayerMixin extends Player {
     OutgoingChatMessage finalMessage = OutgoingChatMessage.create(newMessage.withUnsignedContent(messageProcessed));
 
     finalMessage.sendToPlayer((ServerPlayer) (Object) this, filterMaskEnabled, parameters);
+  }
+
+  @Unique
+  private Component processSiblings(List<Component> siblings) {
+    MutableComponent newComponent = MutableComponent.create(ComponentContents.EMPTY);
+    for (Component sibling : siblings) {
+      Component newSibling;
+      if (!sibling.getSiblings().isEmpty()) {
+        newSibling = processSiblings(sibling.getSiblings());
+      } else {
+        newSibling = EmoteProcessor.processMessage(sibling.getString(), sibling.getStyle());
+      }
+      newComponent.append(newSibling);
+    }
+    return newComponent;
   }
 }
