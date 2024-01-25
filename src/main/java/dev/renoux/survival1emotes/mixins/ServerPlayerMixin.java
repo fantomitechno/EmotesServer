@@ -54,13 +54,10 @@ public abstract class ServerPlayerMixin extends Player {
   // Messages from the server (/chat)
   @Inject(method = "sendSystemMessage(Lnet/minecraft/network/chat/Component;)V", at = @At("HEAD"), cancellable = true)
   private void onSendMessage(Component message, CallbackInfo ci) {
-    if (message.getString().startsWith("message.voicechat") || message.getString().startsWith("xaero-waypoint"))
-        return;
-
-    if (message.getSiblings().isEmpty()) {
+    if (message.toFlatList().isEmpty()) {
       this.sendSystemMessage(EmoteProcessor.processMessage(message.getString(), message.getStyle()), false);
     } else {
-      this.sendSystemMessage(processSiblings(message.getSiblings()), false);
+      this.sendSystemMessage(processSiblings(message.toFlatList()), false);
     }
 
     ci.cancel();
@@ -69,6 +66,8 @@ public abstract class ServerPlayerMixin extends Player {
   // Private messages (/msg, /tell, /w) and normal chat messages
   @Inject(method = "sendChatMessage", at = @At("HEAD"), cancellable = true)
   private void sendChatMessage(OutgoingChatMessage message, boolean filterMaskEnabled, ChatType.Bound parameters, CallbackInfo ci) {
+    if (message.content().getString().contains("xaero-waypoint"))
+      return;
     ci.cancel();
 
     if (!this.acceptsChatMessages()) return;
@@ -87,8 +86,9 @@ public abstract class ServerPlayerMixin extends Player {
     for (Component sibling : siblings) {
       Component newSibling;
       if (!sibling.getSiblings().isEmpty()) {
-        newSibling = processSiblings(sibling.getSiblings());
+        newSibling = processSiblings(sibling.toFlatList());
       } else {
+        System.out.println(sibling.getString());
         newSibling = EmoteProcessor.processMessage(sibling.getString(), sibling.getStyle());
       }
       newComponent.append(newSibling);
