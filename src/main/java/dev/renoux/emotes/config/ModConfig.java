@@ -21,37 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.renoux.survival1emotes.networking;
+package dev.renoux.emotes.config;
 
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.resources.ResourceLocation;
+import org.quiltmc.config.api.Config;
+import org.quiltmc.config.api.values.TrackedValue;
+import org.quiltmc.config.api.values.ValueList;
+import org.quiltmc.loader.api.config.v2.QuiltConfig;
 
-import static dev.renoux.survival1emotes.Emotes.metadata;
+import static dev.renoux.emotes.Emotes.metadata;
 
-public class EmotePacket implements Packet<ClientGamePacketListener> {
-    public static final ResourceLocation PACKET = new ResourceLocation(metadata.id(), "emote");
+public class ModConfig {
+    private TrackedValue<ValueList<String>> Emotes;
 
-    private final byte[] emoteFile;
-    public final String name;
-    public EmotePacket(byte[] emoteFile, String emoteName) {
-        this.emoteFile = emoteFile;
-        this.name = emoteName;
+    private final Config config;
+    private static ModConfig SINGLE_INSTANCE = null;
+
+    public ModConfig() {
+
+        config = QuiltConfig.create(metadata.id(), metadata.id(), builder -> {
+            builder.field(Emotes = TrackedValue.create(ValueList.create("kappa:KappaTest", "kappa:KappaTest"), "emotes"));
+        });
+
+        save();
     }
 
-    public EmotePacket(FriendlyByteBuf buf) {
-        this.emoteFile = null;
-        this.name = buf.readUtf();
+    public static ModConfig getConfig() {
+        if (SINGLE_INSTANCE == null) {
+            SINGLE_INSTANCE = new ModConfig();
+        }
+
+        return SINGLE_INSTANCE;
     }
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeByteArray(this.emoteFile);
-        buf.writeUtf(this.name);
+    public void save() {
+        config.save();
     }
 
-    @Override
-    public void handle(ClientGamePacketListener listener) {
+    public static String getPath() {
+        return "config/" + metadata.id() + "/";
+    }
+
+    public ValueList<String> getEmotes() {
+        return Emotes.getRealValue();
     }
 }

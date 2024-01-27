@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.renoux.survival1emotes.mixins;
+package dev.renoux.emotes.mixins;
 
 import com.mojang.authlib.GameProfile;
-import dev.renoux.survival1emotes.utils.EmoteProcessor;
+import dev.renoux.emotes.utils.EmoteProcessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.*;
 import net.minecraft.server.level.ServerPlayer;
@@ -37,7 +37,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(ServerPlayer.class)

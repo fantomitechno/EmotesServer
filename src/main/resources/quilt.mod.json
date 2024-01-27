@@ -2,18 +2,18 @@
   "schema_version": 1,
   "quilt_loader": {
     "group": "dev.renoux",
-    "id": "survival1emotes",
+    "id": "kfc1emotes",
     "version": "${version}",
     "metadata": {
-      "name": "Survival1Emotes",
-      "description": "Emotes for the survival server",
+      "name": "Emotes Server",
+      "description": ":LUL:",
       "contributors": {
         "Simon - fantomitechno (aka Simon R)": "Developper"
       }
     },
     "intermediate_mappings": "net.fabricmc:intermediary",
     "entrypoints": {
-      "init": "dev.renoux.survival1emotes.Emotes"
+      "init": "dev.renoux.emotes.Emotes"
     },
     "depends": [
       {
@@ -30,7 +30,7 @@
       }
     ]
   },
-  "mixin": "survival1emotes.mixins.json",
+  "mixin": "kfc1emotes.mixins.json",
   "minecraft": {
     "environment": "*"
   }

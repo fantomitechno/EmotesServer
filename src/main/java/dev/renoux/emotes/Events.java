@@ -21,11 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.renoux.survival1emotes;
+package dev.renoux.emotes;
 
-import dev.renoux.survival1emotes.config.ModConfig;
-import dev.renoux.survival1emotes.networking.EmotePacket;
-import dev.renoux.survival1emotes.networking.ListEmotePacket;
+import dev.renoux.emotes.config.ModConfig;
+import dev.renoux.emotes.networking.EmotePacket;
+import dev.renoux.emotes.networking.ListEmotePacket;
 import net.minecraft.network.FriendlyByteBuf;
 import org.quiltmc.config.api.values.ValueList;
 import org.quiltmc.qsl.networking.api.PacketByteBufs;
@@ -37,7 +37,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
-import static dev.renoux.survival1emotes.Emotes.LOGGER;
+import static dev.renoux.emotes.Emotes.LOGGER;
 
 public class Events {
     private static String nameAndHashArray;
