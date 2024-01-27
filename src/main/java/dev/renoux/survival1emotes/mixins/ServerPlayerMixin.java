@@ -88,7 +88,6 @@ public abstract class ServerPlayerMixin extends Player {
       if (!sibling.getSiblings().isEmpty()) {
         newSibling = processSiblings(sibling.toFlatList());
       } else {
-        System.out.println(sibling.getString());
         newSibling = EmoteProcessor.processMessage(sibling.getString(), sibling.getStyle());
       }
       newComponent.append(newSibling);
