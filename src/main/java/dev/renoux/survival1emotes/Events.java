@@ -28,7 +28,6 @@ import dev.renoux.survival1emotes.networking.EmotePacket;
 import dev.renoux.survival1emotes.networking.ListEmotePacket;
 import net.minecraft.network.FriendlyByteBuf;
 import org.quiltmc.config.api.values.ValueList;
-import org.quiltmc.loader.impl.util.FileUtil;
 import org.quiltmc.qsl.networking.api.PacketByteBufs;
 import org.quiltmc.qsl.networking.api.ServerPlayConnectionEvents;
 import org.quiltmc.qsl.networking.api.ServerPlayNetworking;
@@ -37,6 +36,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
+
+import static dev.renoux.survival1emotes.Emotes.LOGGER;
 
 public class Events {
     private static String nameAndHashArray;
@@ -59,8 +60,12 @@ public class Events {
             }
             File file = new File(path);
             if (file.exists()) {
-                emotesFiles.put(splitEmote[0], FileUtil.readAllBytes(new FileInputStream(file)));
-                nameAndHash.append(splitEmote[0]).append(":").append(file.hashCode()).append(",");
+                try {
+                    emotesFiles.put(splitEmote[0], new FileInputStream(file).readAllBytes());
+                    nameAndHash.append(splitEmote[0]).append(":").append(file.hashCode()).append(",");
+                } catch (Exception exception) {
+                    LOGGER.info("An error occured while loading " + emote + " emote: " + exception.getMessage());
+                }
             }
         }
         nameAndHashArray = nameAndHash.toString();
