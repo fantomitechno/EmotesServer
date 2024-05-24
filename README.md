@@ -1,7 +1,4 @@
-# Survival1Emotes
-
-A mod to use emotes on the KFC's servers
-
+# Emotes Server
 ## Installation
 Install the [Quilt Server](https://quiltmc.org/en/install/server/) for 1.20.1\
 
