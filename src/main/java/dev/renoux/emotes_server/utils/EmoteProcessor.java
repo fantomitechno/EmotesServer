@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.renoux.emotes.utils;
+package dev.renoux.emotes_server.utils;
 
-import dev.renoux.emotes.config.ModConfig;
+import dev.renoux.emotes_server.config.ModConfig;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;

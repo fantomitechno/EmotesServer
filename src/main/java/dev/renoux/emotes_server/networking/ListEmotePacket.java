@@ -21,42 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package dev.renoux.emotes_server.networking;
 
-package dev.renoux.emotes;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.resources.ResourceLocation;
 
-import dev.renoux.emotes.config.ModConfig;
-import dev.renoux.emotes.utils.EmoteProcessor;
-import org.quiltmc.loader.api.ModContainer;
-import org.quiltmc.loader.api.ModMetadata;
-import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static dev.renoux.emotes_server.EmotesServer.metadata;
 
-import java.io.IOException;
+public class ListEmotePacket  implements Packet<ClientGamePacketListener> {
+    public static final ResourceLocation PACKET = new ResourceLocation(metadata.id(), "emote_list");
 
-
-public class Emotes implements ModInitializer {
-
-  public static ModMetadata metadata;
-  public static Logger LOGGER;
-
-  @Override
-  public void onInitialize(ModContainer mod) {
-    metadata = mod.metadata();
-    LOGGER = LoggerFactory.getLogger(metadata.id());
-
-    LOGGER.info("{} : LOADING", metadata.name());
-
-    ModConfig.getConfig();
-
-    EmoteProcessor.init();
-
-    try {
-      Events.init();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+    private final String nameAndHashArray;
+    public ListEmotePacket(String nameAndHashArray) {
+        this.nameAndHashArray = nameAndHashArray;
     }
 
-    LOGGER.info("{} : LOADED", metadata.name());
-  }
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeUtf(nameAndHashArray);
+    }
+
+    @Override
+    public void handle(ClientGamePacketListener listener) {
+    }
 }

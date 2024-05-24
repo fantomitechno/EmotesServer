@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "dev.renoux.emotes.mixins",
+  "package": "dev.renoux.emotes_server.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "ServerPlayerMixin"

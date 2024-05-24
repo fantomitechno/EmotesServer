@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.renoux.emotes.mixins;
+package dev.renoux.emotes_server.mixins;
 
 import com.mojang.authlib.GameProfile;
-import dev.renoux.emotes.utils.EmoteProcessor;
+import dev.renoux.emotes_server.utils.EmoteProcessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.*;
 import net.minecraft.server.level.ServerPlayer;

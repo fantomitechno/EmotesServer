@@ -21,47 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.renoux.emotes.config;
+package dev.renoux.emotes_server.networking;
 
-import org.quiltmc.config.api.Config;
-import org.quiltmc.config.api.values.TrackedValue;
-import org.quiltmc.config.api.values.ValueList;
-import org.quiltmc.loader.api.config.v2.QuiltConfig;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.resources.ResourceLocation;
 
-import static dev.renoux.emotes.Emotes.metadata;
+import static dev.renoux.emotes_server.EmotesServer.metadata;
 
-public class ModConfig {
-    private TrackedValue<ValueList<String>> Emotes;
+public class EmotePacket implements Packet<ClientGamePacketListener> {
+    public static final ResourceLocation PACKET = new ResourceLocation(metadata.id(), "emote");
 
-    private final Config config;
-    private static ModConfig SINGLE_INSTANCE = null;
-
-    public ModConfig() {
-
-        config = QuiltConfig.create(metadata.id(), metadata.id(), builder -> {
-            builder.field(Emotes = TrackedValue.create(ValueList.create("kappa:KappaTest", "kappa:KappaTest"), "emotes"));
-        });
-
-        save();
+    private final byte[] emoteFile;
+    public final String name;
+    public EmotePacket(byte[] emoteFile, String emoteName) {
+        this.emoteFile = emoteFile;
+        this.name = emoteName;
     }
 
-    public static ModConfig getConfig() {
-        if (SINGLE_INSTANCE == null) {
-            SINGLE_INSTANCE = new ModConfig();
-        }
-
-        return SINGLE_INSTANCE;
+    public EmotePacket(FriendlyByteBuf buf) {
+        this.emoteFile = null;
+        this.name = buf.readUtf();
     }
 
-    public void save() {
-        config.save();
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeByteArray(this.emoteFile);
+        buf.writeUtf(this.name);
     }
 
-    public static String getPath() {
-        return "config/" + metadata.id() + "/";
-    }
-
-    public ValueList<String> getEmotes() {
-        return Emotes.getRealValue();
+    @Override
+    public void handle(ClientGamePacketListener listener) {
     }
 }

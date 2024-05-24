@@ -21,11 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.renoux.emotes;
+package dev.renoux.emotes_server;
 
-import dev.renoux.emotes.config.ModConfig;
-import dev.renoux.emotes.networking.EmotePacket;
-import dev.renoux.emotes.networking.ListEmotePacket;
+import dev.renoux.emotes_server.config.ModConfig;
+import dev.renoux.emotes_server.networking.EmotePacket;
+import dev.renoux.emotes_server.networking.ListEmotePacket;
 import net.minecraft.network.FriendlyByteBuf;
 import org.quiltmc.config.api.values.ValueList;
 import org.quiltmc.qsl.networking.api.PacketByteBufs;
@@ -37,7 +37,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
-import static dev.renoux.emotes.Emotes.LOGGER;
+import static dev.renoux.emotes_server.EmotesServer.LOGGER;
 
 public class Events {
     private static String nameAndHashArray;
@@ -82,7 +82,7 @@ public class Events {
     private static void initCustomPayload() {
         ServerPlayNetworking.registerGlobalReceiver(EmotePacket.PACKET, (server, player, handler, buf, responseSender) -> {
             EmotePacket packet = new EmotePacket(buf);
-            Emotes.LOGGER.info(player.getName().getString() + " asked for " + packet.name);
+            LOGGER.info(player.getName().getString() + " asked for " + packet.name);
             FriendlyByteBuf newBuf = PacketByteBufs.create();
             new EmotePacket(emotesFiles.get(packet.name), packet.name).write(newBuf);
             responseSender.sendPacket(EmotePacket.PACKET, newBuf);

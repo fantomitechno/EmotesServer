@@ -2,7 +2,7 @@
   "schema_version": 1,
   "quilt_loader": {
     "group": "dev.renoux",
-    "id": "kfc1emotes",
+    "id": "emotes_server",
     "version": "${version}",
     "metadata": {
       "name": "Emotes Server",
@@ -30,7 +30,7 @@
       }
     ]
   },
-  "mixin": "kfc1emotes.mixins.json",
+  "mixin": "emotes_server.mixins.json",
   "minecraft": {
     "environment": "*"
   }
