@@ -1,3 +1,4 @@
+# MOVED IN THE [MAIN MOD](https://github.com/fantomitechno/Emotes)
 # Emotes Server
 ## Installation
 Install the [Quilt Server](https://quiltmc.org/en/install/server/) for 1.20.1\
